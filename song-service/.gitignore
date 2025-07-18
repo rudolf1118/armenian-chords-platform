@@ -68,3 +68,4 @@ docker-compose.override.yml
 
 # GraphQL schema (auto-generated)
 src/schema.gql
+.notes.md

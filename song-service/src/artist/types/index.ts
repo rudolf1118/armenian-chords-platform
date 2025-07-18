@@ -1,0 +1,1 @@
+export type ArtistType = 'solo' | 'band' | 'duo' | 'unknown';

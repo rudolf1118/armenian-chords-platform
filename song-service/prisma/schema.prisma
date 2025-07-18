@@ -8,15 +8,45 @@ datasource db {
 }
 
 model Artist {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique
-  songs  Song[]
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  type      String?   @default("unknown") // "band", "solo", "duo", etc.
+  slug       String?   @unique
+  bio        String?
+  country    String?
+  birthdate  DateTime?
+  imageUrl   String?
+  songs      Song[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt @default(now())
 }
 
 model Song {
-  id        Int     @id @default(autoincrement())
-  title     String
-  chords    String
-  artist    Artist  @relation(fields: [artistId], references: [id])
-  artistId  Int
+  id         Int               @id @default(autoincrement())
+  title      String
+  artist     Artist            @relation(fields: [artistId], references: [id])
+  artistId   Int
+  lines      SongLine[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt @default(now())
+}
+
+model SongLine {
+  id      Int              @id @default(autoincrement())
+  song    Song             @relation(fields: [songId], references: [id])
+  songId  Int
+  text    String           // song 
+  chords  ChordOnLine[]    // [{ "chord": "Am", "start": 0, "end": 4 }, { "chord": "G", "start": 5, "end": 9 } ]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt @default(now())
+  order   Int 
+}
+
+model ChordOnLine {
+  id         Int          @id @default(autoincrement())
+  line       SongLine     @relation(fields: [lineId], references: [id])
+  lineId     Int
+  chord      String       // "Am", "G", "E7"
+  end        Int         
+  start      Int  
 }
